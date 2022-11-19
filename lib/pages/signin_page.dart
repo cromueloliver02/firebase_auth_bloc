@@ -12,14 +12,13 @@ class SigninPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return KeyboardDismisser(
-      gestures: const [
+    return const KeyboardDismisser(
+      gestures: [
         GestureType.onTap,
         GestureType.onPanUpdateDownDirection,
       ],
       child: Scaffold(
-        appBar: AppBar(),
-        body: const Center(
+        body: Center(
           child: Padding(
             padding: EdgeInsets.symmetric(horizontal: 30),
             child: _FormBody(),
@@ -89,6 +88,7 @@ class _FormBodyState extends State<_FormBody> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
+          const SizedBox(height: 100),
           Image.asset(
             'assets/images/flutter_logo.png',
             width: 250,
