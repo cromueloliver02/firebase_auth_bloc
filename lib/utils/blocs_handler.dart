@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import '../blocs/blocs.dart';
+import '../cubits/cubits.dart';
 import '../repositories/auth_repository.dart';
 
 class BlocsHandler {
@@ -16,6 +17,11 @@ class BlocsHandler {
   final List<BlocProvider> blocProviders = [
     BlocProvider<AuthBloc>(
       create: (ctx) => AuthBloc(
+        authRepository: ctx.read<AuthRepository>(),
+      ),
+    ),
+    BlocProvider<SigninCubit>(
+      create: (ctx) => SigninCubit(
         authRepository: ctx.read<AuthRepository>(),
       ),
     ),
