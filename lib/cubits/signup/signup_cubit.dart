@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
 
@@ -33,6 +34,8 @@ class SignupCubit extends Cubit<SignupState> {
         status: SignupStatus.error,
         error: err,
       ));
+
+      if (kDebugMode) print('Error: $err');
     }
   }
 }

@@ -108,7 +108,7 @@ class _FormBodyState extends State<_FormBody> {
   }
 
   void _signupListener(BuildContext ctx, SignupState state) {
-    if (state.status == SigninStatus.error) {
+    if (state.status == SignupStatus.error) {
       showErrorDialog(ctx, state.error);
     }
   }
@@ -135,7 +135,7 @@ class _FormBodyState extends State<_FormBody> {
             TextFormField(
               autocorrect: false,
               keyboardType: TextInputType.emailAddress,
-              enabled: state.status != SigninStatus.submitting,
+              enabled: state.status != SignupStatus.submitting,
               decoration: const InputDecoration(
                 filled: true,
                 labelText: 'Name',
@@ -149,7 +149,7 @@ class _FormBodyState extends State<_FormBody> {
             TextFormField(
               autocorrect: false,
               keyboardType: TextInputType.emailAddress,
-              enabled: state.status != SigninStatus.submitting,
+              enabled: state.status != SignupStatus.submitting,
               decoration: const InputDecoration(
                 filled: true,
                 labelText: 'Email',
@@ -163,7 +163,7 @@ class _FormBodyState extends State<_FormBody> {
             TextFormField(
               controller: _passwordController,
               obscureText: true,
-              enabled: state.status != SigninStatus.submitting,
+              enabled: state.status != SignupStatus.submitting,
               decoration: const InputDecoration(
                 filled: true,
                 labelText: 'Password',
@@ -176,7 +176,7 @@ class _FormBodyState extends State<_FormBody> {
             const SizedBox(height: 20),
             TextFormField(
               obscureText: true,
-              enabled: state.status != SigninStatus.submitting,
+              enabled: state.status != SignupStatus.submitting,
               decoration: const InputDecoration(
                 filled: true,
                 labelText: 'Confirm password',
@@ -188,7 +188,7 @@ class _FormBodyState extends State<_FormBody> {
             const SizedBox(height: 20),
             ElevatedButton(
               onPressed:
-                  state.status == SigninStatus.submitting ? null : _submit,
+                  state.status == SignupStatus.submitting ? null : _submit,
               style: ElevatedButton.styleFrom(
                 padding: const EdgeInsets.symmetric(vertical: 10),
                 textStyle: const TextStyle(
@@ -196,13 +196,13 @@ class _FormBodyState extends State<_FormBody> {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              child: Text(state.status == SigninStatus.submitting
+              child: Text(state.status == SignupStatus.submitting
                   ? 'Loading...'
                   : 'Sign Up'),
             ),
             const SizedBox(height: 10),
             TextButton(
-              onPressed: state.status == SigninStatus.submitting
+              onPressed: state.status == SignupStatus.submitting
                   ? null
                   : _gotoSigninPage,
               style: TextButton.styleFrom(
