@@ -22,12 +22,10 @@ class SigninPage extends StatelessWidget {
         ],
         child: Scaffold(
           backgroundColor: Colors.white,
-          body: SingleChildScrollView(
-            child: Center(
-              child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 30),
-                child: _FormBody(),
-              ),
+          body: Center(
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 30),
+              child: _FormBody(),
             ),
           ),
         ),
@@ -93,7 +91,7 @@ class _FormBodyState extends State<_FormBody> {
     }
   }
 
-  void _gotoSignupPage() => Navigator.pushReplacementNamed(
+  void _gotoSignupPage() => Navigator.pushNamed(
         context,
         SignupPage.id,
       );
@@ -105,74 +103,70 @@ class _FormBodyState extends State<_FormBody> {
       builder: (ctx, state) => Form(
         key: _formKey,
         autovalidateMode: _autovalidateMode,
-        child: SizedBox(
-          height: MediaQuery.of(context).size.height,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Image.asset(
-                'assets/images/flutter_logo.png',
-                width: 250,
-                height: 250,
+        child: ListView(
+          shrinkWrap: true,
+          children: [
+            Image.asset(
+              'assets/images/flutter_logo.png',
+              width: 250,
+              height: 250,
+            ),
+            const SizedBox(height: 20),
+            TextFormField(
+              autocorrect: false,
+              keyboardType: TextInputType.emailAddress,
+              enabled: state.status != SigninStatus.submitting,
+              decoration: const InputDecoration(
+                filled: true,
+                labelText: 'Email',
+                prefixIcon: Icon(Icons.email),
+                border: OutlineInputBorder(),
               ),
-              const SizedBox(height: 20),
-              TextFormField(
-                autocorrect: false,
-                keyboardType: TextInputType.emailAddress,
-                enabled: state.status != SigninStatus.submitting,
-                decoration: const InputDecoration(
-                  filled: true,
-                  labelText: 'Email',
-                  prefixIcon: Icon(Icons.email),
-                  border: OutlineInputBorder(),
+              validator: _emailValidator,
+              onSaved: (value) => _email = value,
+            ),
+            const SizedBox(height: 20),
+            TextFormField(
+              obscureText: true,
+              enabled: state.status != SigninStatus.submitting,
+              decoration: const InputDecoration(
+                filled: true,
+                labelText: 'Password',
+                prefixIcon: Icon(Icons.lock),
+                border: OutlineInputBorder(),
+              ),
+              validator: _passwordValidator,
+              onSaved: (value) => _password = value,
+            ),
+            const SizedBox(height: 20),
+            ElevatedButton(
+              onPressed:
+                  state.status == SigninStatus.submitting ? null : _submit,
+              style: ElevatedButton.styleFrom(
+                padding: const EdgeInsets.symmetric(vertical: 10),
+                textStyle: const TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
                 ),
-                validator: _emailValidator,
-                onSaved: (value) => _email = value,
               ),
-              const SizedBox(height: 20),
-              TextFormField(
-                obscureText: true,
-                enabled: state.status != SigninStatus.submitting,
-                decoration: const InputDecoration(
-                  filled: true,
-                  labelText: 'Password',
-                  prefixIcon: Icon(Icons.lock),
-                  border: OutlineInputBorder(),
+              child: Text(state.status == SigninStatus.submitting
+                  ? 'Loading...'
+                  : 'Sign In'),
+            ),
+            const SizedBox(height: 10),
+            TextButton(
+              onPressed: state.status == SigninStatus.submitting
+                  ? null
+                  : _gotoSignupPage,
+              style: TextButton.styleFrom(
+                textStyle: const TextStyle(
+                  fontSize: 20,
+                  decoration: TextDecoration.underline,
                 ),
-                validator: _passwordValidator,
-                onSaved: (value) => _password = value,
               ),
-              const SizedBox(height: 20),
-              ElevatedButton(
-                onPressed:
-                    state.status == SigninStatus.submitting ? null : _submit,
-                style: ElevatedButton.styleFrom(
-                  padding: const EdgeInsets.symmetric(vertical: 10),
-                  textStyle: const TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                child: Text(state.status == SigninStatus.submitting
-                    ? 'Loading...'
-                    : 'Sign In'),
-              ),
-              const SizedBox(height: 10),
-              TextButton(
-                onPressed: state.status == SigninStatus.submitting
-                    ? null
-                    : _gotoSignupPage,
-                style: TextButton.styleFrom(
-                  textStyle: const TextStyle(
-                    fontSize: 20,
-                    decoration: TextDecoration.underline,
-                  ),
-                ),
-                child: const Text('Not a member? Sign Up!'),
-              ),
-            ],
-          ),
+              child: const Text('Not a member? Sign Up!'),
+            ),
+          ],
         ),
       ),
     );
