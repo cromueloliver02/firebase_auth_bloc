@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import './pages/pages.dart';
-import './utils/blocs_handler.dart';
 import './utils/utils.dart';
 
 class FirebaseAuthApp extends StatelessWidget {

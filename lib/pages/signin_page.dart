@@ -4,6 +4,7 @@ import 'package:validators/validators.dart';
 import 'package:keyboard_dismisser/keyboard_dismisser.dart';
 import '../cubits/cubits.dart';
 import '../pages/signup_page.dart';
+import '../utils/utils.dart';
 
 class SigninPage extends StatelessWidget {
   static const id = '/signin';
@@ -12,16 +13,22 @@ class SigninPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const KeyboardDismisser(
-      gestures: [
-        GestureType.onTap,
-        GestureType.onPanUpdateDownDirection,
-      ],
-      child: Scaffold(
-        body: Center(
-          child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 30),
-            child: _FormBody(),
+    return WillPopScope(
+      onWillPop: () async => false,
+      child: const KeyboardDismisser(
+        gestures: [
+          GestureType.onTap,
+          GestureType.onPanUpdateDownDirection,
+        ],
+        child: Scaffold(
+          backgroundColor: Colors.white,
+          body: SingleChildScrollView(
+            child: Center(
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 30),
+                child: _FormBody(),
+              ),
+            ),
           ),
         ),
       ),
@@ -80,72 +87,93 @@ class _FormBodyState extends State<_FormBody> {
     context.read<SigninCubit>().signin(email: _email!, password: _password!);
   }
 
+  void _signinListener(BuildContext ctx, SigninState state) {
+    if (state.status == SigninStatus.error) {
+      showErrorDialog(ctx, state.error);
+    }
+  }
+
+  void _gotoSignupPage() => Navigator.pushReplacementNamed(
+        context,
+        SignupPage.id,
+      );
+
   @override
   Widget build(BuildContext context) {
-    return Form(
-      key: _formKey,
-      autovalidateMode: _autovalidateMode,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          const SizedBox(height: 100),
-          Image.asset(
-            'assets/images/flutter_logo.png',
-            width: 250,
-            height: 250,
-          ),
-          const SizedBox(height: 20),
-          TextFormField(
-            autocorrect: false,
-            keyboardType: TextInputType.emailAddress,
-            decoration: const InputDecoration(
-              filled: true,
-              labelText: 'Email',
-              prefixIcon: Icon(Icons.email),
-              border: OutlineInputBorder(),
-            ),
-            validator: _emailValidator,
-            onSaved: (value) => _email = value,
-          ),
-          const SizedBox(height: 20),
-          TextFormField(
-            obscureText: true,
-            decoration: const InputDecoration(
-              filled: true,
-              labelText: 'Password',
-              prefixIcon: Icon(Icons.lock),
-              border: OutlineInputBorder(),
-            ),
-            validator: _passwordValidator,
-            onSaved: (value) => _password = value,
-          ),
-          const SizedBox(height: 20),
-          ElevatedButton(
-            onPressed: _submit,
-            style: ElevatedButton.styleFrom(
-              padding: const EdgeInsets.symmetric(vertical: 10),
-              textStyle: const TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
+    return BlocConsumer<SigninCubit, SigninState>(
+      listener: _signinListener,
+      builder: (ctx, state) => Form(
+        key: _formKey,
+        autovalidateMode: _autovalidateMode,
+        child: SizedBox(
+          height: MediaQuery.of(context).size.height,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Image.asset(
+                'assets/images/flutter_logo.png',
+                width: 250,
+                height: 250,
               ),
-            ),
-            child: const Text('Sign In'),
-          ),
-          const SizedBox(height: 10),
-          TextButton(
-            onPressed: () => Navigator.pushReplacementNamed(
-              context,
-              SignupPage.id,
-            ),
-            style: TextButton.styleFrom(
-              textStyle: const TextStyle(
-                fontSize: 20,
-                decoration: TextDecoration.underline,
+              const SizedBox(height: 20),
+              TextFormField(
+                autocorrect: false,
+                keyboardType: TextInputType.emailAddress,
+                enabled: state.status != SigninStatus.submitting,
+                decoration: const InputDecoration(
+                  filled: true,
+                  labelText: 'Email',
+                  prefixIcon: Icon(Icons.email),
+                  border: OutlineInputBorder(),
+                ),
+                validator: _emailValidator,
+                onSaved: (value) => _email = value,
               ),
-            ),
-            child: const Text('Not a member? Sign Up!'),
+              const SizedBox(height: 20),
+              TextFormField(
+                obscureText: true,
+                enabled: state.status != SigninStatus.submitting,
+                decoration: const InputDecoration(
+                  filled: true,
+                  labelText: 'Password',
+                  prefixIcon: Icon(Icons.lock),
+                  border: OutlineInputBorder(),
+                ),
+                validator: _passwordValidator,
+                onSaved: (value) => _password = value,
+              ),
+              const SizedBox(height: 20),
+              ElevatedButton(
+                onPressed:
+                    state.status == SigninStatus.submitting ? null : _submit,
+                style: ElevatedButton.styleFrom(
+                  padding: const EdgeInsets.symmetric(vertical: 10),
+                  textStyle: const TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                child: Text(state.status == SigninStatus.submitting
+                    ? 'Loading...'
+                    : 'Sign In'),
+              ),
+              const SizedBox(height: 10),
+              TextButton(
+                onPressed: state.status == SigninStatus.submitting
+                    ? null
+                    : _gotoSignupPage,
+                style: TextButton.styleFrom(
+                  textStyle: const TextStyle(
+                    fontSize: 20,
+                    decoration: TextDecoration.underline,
+                  ),
+                ),
+                child: const Text('Not a member? Sign Up!'),
+              ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }
