@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/foundation.dart';
 import '../blocs/blocs.dart';
 import '../pages/pages.dart';
 
@@ -11,26 +10,18 @@ class SplashPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<AuthBloc, AuthState>(
-      listener: (context, state) {
-        if (kDebugMode) print('listener $state');
-
+      listener: (ctx, state) {
         if (state.status == AuthStatus.authenticated) {
-          Navigator.pushNamed(context, HomePage.id);
+          Navigator.pushNamed(ctx, HomePage.id);
         }
 
         if (state.status == AuthStatus.unauthenticated) {
-          Navigator.pushNamed(context, SigninPage.id);
+          Navigator.pushNamed(ctx, SigninPage.id);
         }
       },
-      builder: (context, state) {
-        if (kDebugMode) print('builder $state');
-
-        return const Scaffold(
-          body: Center(
-            child: CircularProgressIndicator(),
-          ),
-        );
-      },
+      builder: (ctx, state) => const Scaffold(
+        body: Center(child: CircularProgressIndicator()),
+      ),
     );
   }
 }
