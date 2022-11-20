@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:validators/validators.dart';
 import 'package:keyboard_dismisser/keyboard_dismisser.dart';
 import '../cubits/cubits.dart';
+import '../pages/pages.dart';
 import '../utils/functions.dart';
 
 class SignupPage extends StatelessWidget {
@@ -113,7 +114,9 @@ class _FormBodyState extends State<_FormBody> {
     }
   }
 
-  void _gotoSigninPage() => Navigator.pop(context);
+  void _gotoSigninPage() {
+    Navigator.pushReplacementNamed(context, SigninPage.id);
+  }
 
   @override
   Widget build(BuildContext context) {

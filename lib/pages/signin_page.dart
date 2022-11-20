@@ -91,10 +91,9 @@ class _FormBodyState extends State<_FormBody> {
     }
   }
 
-  void _gotoSignupPage() => Navigator.pushNamed(
-        context,
-        SignupPage.id,
-      );
+  void _gotoSignupPage() {
+    Navigator.pushReplacementNamed(context, SignupPage.id);
+  }
 
   @override
   Widget build(BuildContext context) {
