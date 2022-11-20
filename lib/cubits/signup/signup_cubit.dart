@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
 
 import '../../models/custom_error.dart';
-import '../../repositories/auth_repository.dart';
+import '../../repositories/repositories.dart';
 
 part 'signup_state.dart';
 

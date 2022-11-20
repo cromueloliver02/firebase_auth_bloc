@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
 
@@ -18,6 +19,8 @@ class ProfileCubit extends Cubit<ProfileState> {
 
     try {
       final User user = await profileRepository.getProfile(uid: uid);
+
+      if (kDebugMode) print('user $user');
 
       emit(state.copyWith(
         status: ProfileStatus.loaded,
