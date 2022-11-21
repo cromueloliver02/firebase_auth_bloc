@@ -13,11 +13,6 @@ class ProfileRepository {
       final DocumentSnapshot userDoc = await usersRef.doc(uid).get();
 
       if (!userDoc.exists) {
-        // throw const CustomError(
-        //   code: '404: Not found',
-        //   message: 'User profile not found',
-        //   plugin: 'flutter_error/server_error',
-        // );
         throw '404: User not found';
       }
 
